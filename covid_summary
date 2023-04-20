@@ -1,0 +1,42 @@
+#Cleaning dulpicate, null and removing them.
+SELECT distinct confirmed_cases, deaths
+
+FROM `bigquery-public-data.covid19_usafacts.summary` 
+
+ SELECT confirmed_cases, deaths
+
+ FROM `bigquery-public-data.covid19_usafacts.summary` 
+
+WHERE confirmed_cases IS NOT NULL;
+
+SELECT confirmed_cases, deaths, COUNT(*)
+ FROM `bigquery-public-data.covid19_usafacts.summary` 
+GROUP BY confirmed_cases, deaths
+HAVING COUNT(*) > 1;
+
+#Analyzing the Current State of Cases and Fatalities by State
+SELECT
+  state,
+  EXTRACT(YEAR FROM date) AS year,
+  SUM(confirmed_cases) AS total_confirmed_cases,
+  SUM(deaths) AS total_deaths
+FROM
+  `bigquery-public-data.covid19_usafacts.summary`
+GROUP BY
+  state, year
+ORDER BY
+  year,
+  total_confirmed_cases DESC,
+  total_deaths DESC;
+
+#Tracking COVID-19 Cases Over Time: Annual Collection and Analysis
+SELECT
+  EXTRACT(YEAR FROM date) AS year,
+  SUM(confirmed_cases) AS total_confirmed_cases
+FROM
+  `bigquery-public-data.covid19_usafacts.summary`
+GROUP BY
+  year
+ORDER BY
+  year;
+
